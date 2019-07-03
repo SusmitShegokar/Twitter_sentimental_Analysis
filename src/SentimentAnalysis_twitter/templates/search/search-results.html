@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Twitter Sentimental Analysis | Result</title>
+
+
+  
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static '/css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+<body>
+  <h1 class="header center orange-text" id="bla">Twitter Sentimental Analysis</h1>
+
+    <div class="card-panel center teal lighten-2 card-content black-text">Analysing search results for <em><strong>{{ search }} ...</strong></em></div>
+    <div class="row">
+      <div class="center blue-text"></div>
+    </div>
+
+    <!-- Brief analysis  -->
+    <!-- *********************************** -->
+    <div class="container row">
+
+      <div class="col s4">
+          <div class="card green">
+              <div class="card-content white-text" style="word-wrap: break-word">
+                <span class="card-title center">Positive Tweets</span>
+                <p class="center"> Score: {{ percentage.positive }}%</p>
+              </div>
+          </div>
+      </div>
+      <div class="col s4">
+          <div class="card blue">
+              <div class="card-content white-text" style="word-wrap: break-word">
+                <span class="card-title center">Neutral Tweets</span>
+                <p class="center"> Score: {{ percentage.neutral }}%</p>
+              </div>
+          </div>
+      </div>
+      <div class="col s4">
+          <div class="card red">
+              <div class="card-content white-text" style="word-wrap: break-word">
+                <span class="card-title center">Negative Tweets</span>
+                <p class="center"> Score: {{ percentage.negative }}%</p>
+              </div>
+          </div>
+      </div>
+
+    </div>
+
+
+    <!-- Verdict  -->
+    <!-- *********************************** -->
+    <div class="card-panel center teal lighten-2">Most tweets that arent neutral about <em><strong>{{ search }}</strong></em> are <strong>{{ percentage.max }}</strong></div>
+    <div class="row">
+      <div class="center blue-text"></div>
+    </div>
+
+    <!-- Printing out all the tweets  -->
+    <!-- *********************************** -->
+    <div class="row container col s12 m12">
+
+    {% for dict in all_tweets %}
+
+     <div class="card {{ dict.color }}" >
+        <div class="card-content white-text">
+        <span class="card-title">{{ dict.username }}</span>
+        <p>{{ dict.tweet}}</p>
+        <p><i>The polarity of this tweet is <b>{{ dict.polarity }}</b></i></p>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    </div> 
+
+    <div class="container row center">
+      <a href="{% url 'index' %}" id="download-button" class="btn-large waves-effect waves-light orange tooltipped" data-position="center" data-delay="50" data-tooltip="Click to search again">Analyse again</a>
+      
+    </div>
+  
+
+<footer class="page-footer orange">
+    <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">About me</h5>
+                <p class="grey-text text-lighten-4">about analysis</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Connect With me</h5>
+                <div>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com" target="_blank">GitHub</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://in.linkedin.com/in/" target="_blank">LinkedIn</a></li>
+                  <li><a class="grey-text text-lighten-3" href="" target="_blank">Email</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
+    <div class="footer-copyright centre">
+      <div class="container">
+        <h5>Made by</h5>
+        <p>name</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{% static 'js/materialize.js' %}"></script>
+  <script src="{% static 'js/init.js' %}"></script>
+
+  </body>
+</html>
+
