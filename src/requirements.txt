@@ -1,4 +1,4 @@
-Django==1.11.3
+Django==1.11.28
 django-materialize-css==0.0.1
 gunicorn==19.7.1
 whitenoise==3.3.0
