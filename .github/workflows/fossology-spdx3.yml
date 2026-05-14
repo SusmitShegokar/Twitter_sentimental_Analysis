@@ -1,0 +1,46 @@
+name: FOSSology SPDX 3.0 Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+# [SPDX3-ADDITION] The scanner image (ghcr.io/shatakshisgtiwari-jpg/fossology-spdx3:latest)
+# is built and pushed by fossology-fork CI (docker-build.yml / release-publish.yml).
+# fossology-action-fork (shatakshisgtiwari-jpg/fossology-action) references that
+# image directly via its action.yaml — no image build is needed in this repo.
+
+jobs:
+  # ── Scan repo → Generate SPDX 3.0 report → Archive ──
+  scan-and-report:
+    runs-on: ubuntu-latest
+    name: FOSSology Scan + SPDX 3.0 Report
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # [SPDX3-ADDITION] fossology-action-fork pulls the fossology-spdx3 image
+      # from fossology-fork's GHCR, runs all scanners and generates SPDX 3.0 report.
+      - name: Run FOSSology scan + SPDX 3.0 report
+        uses: shatakshisgtiwari-jpg/fossology-action@main
+        with:
+          scan_mode: 'repo'
+          scanners: 'nomos ojo copyright keyword'
+          report_format: 'SPDX3_TTL'
+          allowlist_file_path: 'allowlist.json'
+
+      - name: Fix result permissions
+        if: always()
+        run: sudo chmod -R a+rw results/ 2>/dev/null || true
+
+      - name: Upload SPDX 3.0 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spdx3-report
+          path: results/
